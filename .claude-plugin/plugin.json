@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "m-ghalib",
+  "version": "1.0.0",
+  "description": "Read-only Hacker News tools for Claude Code and Cowork.",
+  "author": {
+    "name": "momin"
+  },
+  "repository": "https://github.com/m-ghalib/hackernews-claude-desktop",
+  "keywords": [
+    "hacker-news",
+    "mcp",
+    "research",
+    "search"
+  ],
+  "userConfig": {
+    "username": {
+      "type": "string",
+      "title": "Hacker News username",
+      "description": "Optional default Hacker News handle. When set, get_user, get_user_favorites, and get_replies_to_user can be called without username, and search will expand the tag author_me. Leave blank to require username on every call."
+    }
+  }
+}

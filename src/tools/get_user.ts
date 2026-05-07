@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { GetUserSchema, zodError } from "../schemas.js";
+import { resolveUsername } from "../config.js";
 import { fetchUser } from "../sources/firebase.js";
 import { algoliaSearchByDate } from "../sources/algolia.js";
 import { classifyError, makeError } from "../http.js";
@@ -12,11 +13,15 @@ export async function toolGetUser(rawInput: unknown) {
 
   const input = parsed.data;
 
+  const resolved = resolveUsername(input.username);
+  if (!resolved.ok) return resolved.error;
+  const username = resolved.username;
+
   try {
-    const user = await fetchUser(input.username);
+    const user = await fetchUser(username);
 
     if (!user) {
-      return makeError("NOT_FOUND", `User "${input.username}" not found`, false);
+      return makeError("NOT_FOUND", `User "${username}" not found`, false);
     }
 
     const result: Record<string, unknown> = {
@@ -30,11 +35,11 @@ export async function toolGetUser(rawInput: unknown) {
     if (input.include_recent) {
       const [storiesResp, commentsResp] = await Promise.all([
         algoliaSearchByDate({
-          tags: [`story`, `author_${input.username}`],
+          tags: [`story`, `author_${username}`],
           limit: input.recent_limit,
         }),
         algoliaSearchByDate({
-          tags: [`comment`, `author_${input.username}`],
+          tags: [`comment`, `author_${username}`],
           limit: input.recent_limit,
         }),
       ]);

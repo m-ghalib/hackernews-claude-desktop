@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SearchSchema, zodError } from "../schemas.js";
+import { resolveUsername } from "../config.js";
 import { algoliaSearch } from "../sources/algolia.js";
 import { classifyError } from "../http.js";
 
@@ -11,10 +12,17 @@ export async function toolSearch(rawInput: unknown) {
 
   const input = parsed.data;
 
+  let tags = input.tags;
+  if (tags?.some((t) => t === "author_me")) {
+    const resolved = resolveUsername(undefined);
+    if (!resolved.ok) return resolved.error;
+    tags = tags.map((t) => (t === "author_me" ? `author_${resolved.username}` : t));
+  }
+
   try {
     const result = await algoliaSearch({
       query: input.query,
-      tags: input.tags,
+      tags,
       domain: input.domain,
       searchable_attributes: input.searchable_attributes,
       min_points: input.min_points,

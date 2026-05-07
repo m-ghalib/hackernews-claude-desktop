@@ -1,18 +1,18 @@
 {
   "name": "hackernews-mcp",
   "version": "1.0.0",
-  "description": "HackerNews MCP server for Claude Desktop",
+  "description": "Hacker News MCP plugin for Claude Code and Cowork",
   "type": "module",
   "engines": {
     "node": ">=22"
   },
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "bin": {
-    "hackernews-mcp": "dist/index.js"
+    "hackernews-mcp": "dist/index.cjs"
   },
   "scripts": {
     "build": "tsup",
-    "start": "node dist/index.js",
+    "start": "node dist/index.cjs",
     "dev": "tsx src/index.ts",
     "test": "vitest run --exclude 'tests/network/**'",
     "test:network": "vitest run --config vitest.network.config.ts"
@@ -24,7 +24,6 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
-    "@modelcontextprotocol/inspector": "^0.14.3",
     "@types/node": "^22.15.17",
     "tsup": "^8.4.0",
     "tsx": "^4.19.4",

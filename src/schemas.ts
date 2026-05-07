@@ -28,7 +28,7 @@ export const GetItemSchema = z.object({
 });
 
 export const GetUserSchema = z.object({
-  username: z.string().min(1),
+  username: z.string().min(1).optional(),
   include_recent: z.boolean().optional().default(false),
   recent_limit: z.number().int().min(1).max(100).optional().default(20),
 });
@@ -53,7 +53,7 @@ export const GetHiringThreadSchema = z.object({
 export const GetUpdatesSchema = z.object({});
 
 export const GetUserFavoritesSchema = z.object({
-  username: z.string().min(1),
+  username: z.string().min(1).optional(),
   limit: z.number().int().min(1).max(100).optional().default(30),
   offset: z.number().int().min(0).optional().default(0),
 });
@@ -63,7 +63,7 @@ export const GetActiveDiscussionsSchema = z.object({
 });
 
 export const GetRepliesToUserSchema = z.object({
-  username: z.string().min(1),
+  username: z.string().min(1).optional(),
   date_start: z.string().optional(),
   date_end: z.string().optional(),
   limit: z.number().int().min(1).max(200).optional().default(50),

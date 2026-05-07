@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { GetRepliesToUserSchema, zodError } from "../schemas.js";
+import { resolveUsername } from "../config.js";
 import { algoliaSearchByDate } from "../sources/algolia.js";
 import { fetchItem } from "../sources/firebase.js";
 import { classifyError, Semaphore } from "../http.js";
@@ -16,6 +17,10 @@ export async function toolGetRepliesToUser(rawInput: unknown) {
   if (!parsed.success) return zodError(parsed.error);
 
   const input = parsed.data;
+
+  const resolved = resolveUsername(input.username);
+  if (!resolved.ok) return resolved.error;
+  const username = resolved.username;
 
   // Default date_start to 30 days ago
   const dateStart =
@@ -70,7 +75,7 @@ export async function toolGetRepliesToUser(rawInput: unknown) {
     );
 
     // Step 3: Filter by parent author matching username
-    const targetUsername = input.username.toLowerCase();
+    const targetUsername = username.toLowerCase();
     const replies: Array<{
       id: number;
       author: string;
@@ -102,7 +107,7 @@ export async function toolGetRepliesToUser(rawInput: unknown) {
     }
 
     return {
-      username: input.username,
+      username,
       replies,
       total_scanned: totalScanned,
     };

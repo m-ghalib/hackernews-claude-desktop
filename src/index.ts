@@ -42,7 +42,7 @@ server.registerTool(
   "search",
   {
     description:
-      "Full-text search over HackerNews stories, comments, jobs, and polls via Algolia. Supports filters by date, points, domain, tags (story/comment/show_hn/ask_hn/job etc.), and sort order.",
+      "Full-text search over HackerNews stories, comments, jobs, and polls via Algolia. Supports filters by date, points, domain, tags (story/comment/show_hn/ask_hn/job/author_<name>), and sort order. The literal tag `author_me` is rewritten to the plugin's configured Hacker News username when set.",
     inputSchema: SearchSchema,
   },
   async (input) => toContent(await toolSearch(input))
@@ -62,7 +62,7 @@ server.registerTool(
   "get_user",
   {
     description:
-      "Fetch a HackerNews user profile (karma, about, account age). Optionally include recent stories and comments via Algolia.",
+      "Fetch a HackerNews user profile (karma, about, account age). Optionally include recent stories and comments via Algolia. `username` is optional when the plugin's default Hacker News username is configured.",
     inputSchema: GetUserSchema,
   },
   async (input) => toContent(await toolGetUser(input))
@@ -102,7 +102,7 @@ server.registerTool(
   "get_user_favorites",
   {
     description:
-      "Scrape a HackerNews user's favorited stories. Not available via API; parsed from the HN web interface.",
+      "Scrape a HackerNews user's favorited stories. Not available via API; parsed from the HN web interface. `username` is optional when the plugin's default Hacker News username is configured.",
     inputSchema: GetUserFavoritesSchema,
   },
   async (input) => toContent(await toolGetUserFavorites(input))
@@ -122,7 +122,7 @@ server.registerTool(
   "get_replies_to_user",
   {
     description:
-      "Find all comments that are direct replies to a specific HackerNews user within a date range. Useful for mention tracking and engagement analysis.",
+      "Find all comments that are direct replies to a specific HackerNews user within a date range. Useful for mention tracking and engagement analysis. `username` is optional when the plugin's default Hacker News username is configured.",
     inputSchema: GetRepliesToUserSchema,
   },
   async (input) => toContent(await toolGetRepliesToUser(input))

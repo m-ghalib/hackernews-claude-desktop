@@ -1,0 +1,14 @@
+{
+  "name": "hackernews",
+  "description": "Hacker News tools for Claude Code and Cowork.",
+  "owner": {
+    "name": "momin"
+  },
+  "plugins": [
+    {
+      "name": "m-ghalib",
+      "source": "./",
+      "description": "Read-only Hacker News MCP tools for Claude Code and Cowork."
+    }
+  ]
+}
