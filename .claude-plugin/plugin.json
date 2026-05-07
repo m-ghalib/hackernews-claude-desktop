@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "m-ghalib",
+  "name": "hackernews",
   "version": "1.0.0",
   "description": "Read-only Hacker News tools for Claude Code and Cowork.",
   "author": {

@@ -1,16 +1,39 @@
 # Hacker News Plugin for Claude Code and Cowork
 
-Read-only Hacker News tools packaged as a Claude Code plugin.
+Read-only Hacker News tools as a plugin for Claude Code (CLI) and Cowork (Claude Desktop).
 
-The plugin adds a local Model Context Protocol server with tools for Hacker News search, stories, comment threads, users, favorites, active discussions, hiring threads, updates, and replies.
-
-No Hacker News account, API key, manual JSON config, or separate Node.js install is required for normal plugin use. Claude Code provides the Node.js runtime used by the plugin.
+Adds a local Model Context Protocol server with tools for Hacker News search, stories, comment threads, users, favorites, active discussions, hiring threads, updates, and replies. No Hacker News account or API key required.
 
 Repository: [m-ghalib/hackernews-claude-desktop](https://github.com/m-ghalib/hackernews-claude-desktop)
 
-## Install
+- Marketplace: `m-ghalib`
+- Plugin: `hackernews`
 
-From Claude Code, add the GitHub repository as a plugin marketplace:
+## Install in Cowork (Claude Desktop)
+
+1. Open the Claude Desktop app and click **Customize** in the sidebar.
+2. Next to **Personal plugins**, click the **+** button.
+3. Choose **Create plugin → Add marketplace**.
+4. Paste the marketplace source and confirm:
+
+   ```text
+   m-ghalib/hackernews-claude-desktop
+   ```
+
+   If the shorthand is rejected, use the full URL:
+
+   ```text
+   https://github.com/m-ghalib/hackernews-claude-desktop
+   ```
+
+5. The **m-ghalib** marketplace now appears under Personal plugins. Open it.
+6. Click the **+** next to the **Hackernews** plugin to install it.
+7. When prompted, enter your Hacker News username (optional, see below) or leave it blank.
+8. The plugin's tools are now callable from any Claude Desktop conversation. If they do not appear, fully quit and reopen Claude Desktop.
+
+## Install in Claude Code (CLI)
+
+Add the marketplace:
 
 ```text
 /plugin marketplace add m-ghalib/hackernews-claude-desktop
@@ -19,42 +42,41 @@ From Claude Code, add the GitHub repository as a plugin marketplace:
 Install the plugin:
 
 ```text
-/plugin install m-ghalib@hackernews
+/plugin install hackernews@m-ghalib
 ```
 
-Reload plugins or restart Claude Code if prompted:
+Restart Claude Code if prompted.
 
-```text
-/reload-plugins
+Verify the install:
+
+```bash
+claude plugin list
 ```
 
-The plugin is now available as the `hackernews` Model Context Protocol server.
+The `hackernews` plugin should appear under the `m-ghalib` marketplace.
+
+## Update or remove
+
+- **Update** (Claude Code): `/plugin marketplace update m-ghalib`
+- **Update** (Cowork): open the marketplace under Personal plugins and reinstall.
+- **Remove** (Claude Code): `/plugin uninstall hackernews@m-ghalib`
+- **Remove** (Cowork): open the plugin under Personal plugins and remove it.
 
 ## Configure your Hacker News handle (optional)
 
-When the plugin is enabled, Claude Code prompts for an optional Hacker News username. If you set it:
+Both Claude Code and Cowork prompt for an optional Hacker News username when the plugin is enabled. If you set it:
 
 - `get_user`, `get_user_favorites`, and `get_replies_to_user` can be called without a `username` argument and fall back to your handle.
-- `search` rewrites the literal tag `author_me` to `author_<your-handle>`, so prompts like `search HN for my recent comments about vector databases` work without quoting your handle.
+- `search` rewrites the literal tag `author_me` to `author_<your-handle>`.
 
-Leave the field blank to require an explicit `username` on every call. The handle is stored in `settings.json` (non-sensitive) and is passed to the MCP server as the environment variable `HN_DEFAULT_USERNAME`. To change it later, run `/plugin` and reconfigure, then `/reload-plugins` or restart Claude Code.
+Leave it blank to require an explicit `username` on every call. The handle is stored in `settings.json` (non-sensitive) and passed to the MCP server as `HN_DEFAULT_USERNAME`.
 
 Example prompts once configured:
 
 - `Analyze my Hacker News profile: karma, top 10 submissions, themes in last 50 comments.`
 - `Show recent replies to me and summarize the sentiment.`
 - `List my favorites grouped by domain.`
-- `Search HN for my comments about Postgres in the last 90 days.` (uses `tags=["comment", "author_me"]`)
-
-## Use
-
-Ask Claude:
-
-- `Search Hacker News for recent Show HN posts about vector databases.`
-- `Get the top 10 Hacker News stories.`
-- `Fetch item 8863 with comments.`
-- `Find remote posts in the latest Who is Hiring thread that mention product manager.`
-- `Show active Hacker News discussions with the most comment activity.`
+- `Search HN for my comments about Postgres in the last 90 days.`
 
 ## Tools
 
@@ -70,64 +92,27 @@ Ask Claude:
 | `get_active_discussions` | Parse the Hacker News active page. |
 | `get_replies_to_user` | Find recent comments that reply directly to a given user. |
 
-## Plugin Layout
-
-```text
-hackernews-claude-desktop/
-├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
-├── .mcp.json
-├── dist/
-│   └── index.cjs
-└── README.md
-```
-
-Claude Code discovers the plugin from `.claude-plugin/plugin.json`. It starts the bundled Hacker News server from `.mcp.json` when the plugin is enabled.
-
-Cowork uses the same plugin format through the Claude plugin directory. Submit the plugin to the directory when it is ready for public distribution.
-
 ## Troubleshooting
-
-Validate the plugin:
-
-```bash
-claude plugin validate .
-```
-
-List marketplaces:
-
-```bash
-claude plugin marketplace list
-```
 
 If the plugin does not load:
 
-- Confirm `.claude-plugin/plugin.json` exists at the plugin root.
-- Confirm `.mcp.json` exists at the plugin root.
-- Confirm `dist/index.cjs` exists.
-- Run `/reload-plugins`.
-- Restart Claude Code.
+- Confirm `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `.mcp.json`, and `dist/index.cjs` all exist at the repo root.
+- In Claude Code, run `claude plugin validate .` from the repo root.
+- Restart Claude Code or fully quit and reopen Claude Desktop.
 
-## Maintainer Commands
+## Maintainer
 
-Build the bundled server:
+Build the bundled server and run tests:
 
 ```bash
 npm install
 npm run build
-```
-
-Run tests:
-
-```bash
 npm test
 npm run test:network
 ```
 
 ## References
 
-- [Create plugins](https://code.claude.com/docs/en/plugins)
-- [Create and distribute a plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces)
-- [Plugins reference](https://code.claude.com/docs/en/plugins-reference)
+- [Plugins](https://code.claude.com/docs/en/plugins)
+- [Plugin marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
 - [Submit your plugin](https://claude.com/docs/plugins/submit)
