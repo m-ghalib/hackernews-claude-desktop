@@ -1,5 +1,7 @@
 # Hacker News Plugin for Claude Code and Cowork
 
+![Demo](docs/media/demo.gif)
+
 Read-only Hacker News tools as a plugin for Claude Code (CLI) and Cowork (Claude Desktop).
 
 Adds a local Model Context Protocol server with tools for Hacker News search, stories, comment threads, users, favorites, active discussions, hiring threads, updates, and replies. No Hacker News account or API key required.
