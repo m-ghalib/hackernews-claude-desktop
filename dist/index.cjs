@@ -56112,20 +56112,14 @@ async function fetchHTML(url, semaphore) {
 }
 
 // src/config.ts
-function getDefaultUsername() {
-  const raw = process.env.HN_DEFAULT_USERNAME?.trim();
-  if (!raw) return void 0;
-  if (raw.startsWith("${")) return void 0;
-  return raw;
-}
 function resolveUsername(provided) {
-  const value = provided?.trim() || getDefaultUsername();
+  const value = provided?.trim();
   if (!value) {
     return {
       ok: false,
       error: makeError(
         "INVALID_INPUT",
-        "username is required: pass it explicitly or set the plugin's Hacker News username in the configuration dialog.",
+        "username is required: pass it explicitly. Tip: tell Claude your Hacker News handle once and the set-default-username skill will reuse it for the rest of the conversation.",
         false
       )
     };

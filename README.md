@@ -28,8 +28,7 @@ Repository: [m-ghalib/hackernews-claude-desktop](https://github.com/m-ghalib/hac
 
 5. The **m-ghalib** marketplace now appears under Personal plugins. Open it.
 6. Click the **+** next to the **Hackernews** plugin to install it.
-7. When prompted, enter your Hacker News username (optional, see below) or leave it blank.
-8. The plugin's tools are now callable from any Claude Desktop conversation. If they do not appear, fully quit and reopen Claude Desktop.
+7. The plugin's tools and the `set-default-username` skill are now available in any Claude Desktop conversation. If they do not appear, fully quit and reopen Claude Desktop.
 
 ## Install in Claude Code (CLI)
 
@@ -62,21 +61,24 @@ The `hackernews` plugin should appear under the `m-ghalib` marketplace.
 - **Remove** (Claude Code): `/plugin uninstall hackernews@m-ghalib`
 - **Remove** (Cowork): open the plugin under Personal plugins and remove it.
 
-## Configure your Hacker News handle (optional)
+## Set your Hacker News handle (optional)
 
-Both Claude Code and Cowork prompt for an optional Hacker News username when the plugin is enabled. If you set it:
+Tools that target a specific user (`get_user`, `get_user_favorites`, `get_replies_to_user`) require a `username` argument. To avoid passing it on every call, the plugin ships a `set-default-username` skill that captures your handle once per conversation and reuses it.
 
-- `get_user`, `get_user_favorites`, and `get_replies_to_user` can be called without a `username` argument and fall back to your handle.
-- `search` rewrites the literal tag `author_me` to `author_<your-handle>`.
+At the start of a session, tell Claude:
 
-Leave it blank to require an explicit `username` on every call. The handle is stored in `settings.json` (non-sensitive) and passed to the MCP server as `HN_DEFAULT_USERNAME`.
+```text
+My HN username is pg
+```
 
-Example prompts once configured:
+After that, you can ask:
 
 - `Analyze my Hacker News profile: karma, top 10 submissions, themes in last 50 comments.`
 - `Show recent replies to me and summarize the sentiment.`
 - `List my favorites grouped by domain.`
 - `Search HN for my comments about Postgres in the last 90 days.`
+
+The skill applies to that conversation only. Start a new conversation, set the handle again. To query a different user, name them explicitly ("show pg's recent comments").
 
 ## Tools
 
