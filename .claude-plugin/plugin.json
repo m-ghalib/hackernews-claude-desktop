@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "hackernews",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Read-only Hacker News tools for Claude Code and Cowork.",
   "author": {
     "name": "momin"
